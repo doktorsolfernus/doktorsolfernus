@@ -1,10 +1,48 @@
 https://powerusers.microsoft.com/t5/Building-Flows/Copy-Excel-Data-with-formula-and-paste-only-values/td-p/710483
+https://docs.microsoft.com/en-us/javascript/api/office-scripts/excelscript/excelscript.table?view=office-scripts#addColumn_index__values__name_
 
-#
+# copy from old
 function main(workbook: ExcelScript.Workbook) {
   let tesco0 = workbook.getTable("tesco0").getRangeBetweenHeaderAndTotal().getValues();
   let tesco1 = workbook.getTable("tesco1").getRangeBetweenHeaderAndTotal().getValues();
   let tesco2 = workbook.getTable("tesco2").getRangeBetweenHeaderAndTotal().getValues();
   let tesco = tesco0.concat(tesco1.concat(tesco2));
   console.log(tesco);
+}
+
+# paste to new
+function createTbl (sheet: ExcelScript.Worksheet, i: number) {
+  let tescoRange = sheet.getRange("OFFSET(A3, 0, 0, SUBTOTAL(103, $A:$A) - 1, 9)");
+  let tesco = sheet.addTable(tescoRange, true);
+  tesco.setName('tesco' + i);
+  sheet.getTable('tesco' + i).addColumn(4, null, 'Delta')
+  let deltaRange = sheet.getTable('tesco' + i).getColumn('Delta').getRangeBetweenHeaderAndTotal();
+  deltaRange.setFormula("=VLOOKUP(A4&J4, 'old'!B:D, 3, 0)");
+}
+
+function main(workbook: ExcelScript.Workbook, data: string) {
+  const text = data;
+  //const text = "[[\"12134051\", 44075, 44080, 44081, \"\", 44083, 6, 1, \"Shipped\", \"21-93022-03R\"]]"
+  const myArr: [] = JSON.parse(text);
+
+  let sheet = workbook.addWorksheet();
+  sheet.setName('old');
+  sheet.setVisibility(ExcelScript.SheetVisibility.hidden);
+  //let sheet = workbook.getWorksheet("old");
+
+  let targetRange = sheet.getRange("A1:J" + (1 + myArr.length - 1));
+  targetRange.setValues(myArr);
+  let formulaRange = sheet.getRange("B1:B" + (1 + myArr.length - 1));
+  formulaRange.setFormula("=A4&J4");
+
+  //sheet.getTable('tesco0').getColumn('Delta').delete();
+  //sheet.getTable('tesco0').convertToRange();
+  
+  sheet = workbook.getWorksheet("Safety Stock - 2 Day");
+  createTbl(sheet, 0);
+  sheet = workbook.getWorksheet("General SKus - 42day");
+  createTbl(sheet, 1);
+  sheet = workbook.getWorksheet("Project orders");
+  createTbl(sheet, 2);
+
 }
