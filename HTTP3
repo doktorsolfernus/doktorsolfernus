@@ -4,3 +4,5 @@ HEADERS {Content-type: application/json}
 BODY { 
  "values": "=B4"
 }
+
+README https://docs.microsoft.com/en-us/graph/api/tablecolumn-update?view=graph-rest-1.0&tabs=http
