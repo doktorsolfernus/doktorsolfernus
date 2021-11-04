@@ -1,0 +1,7 @@
+METHOD POST
+https://graph.microsoft.com/v1.0/sites/@{body('HTTP1')?['ID']}/lists/@{body('HTTP2')/drive/root:/GLOBAL/EAIIndexMonthlyReportFiles/Tesco/Tesco%20-%2061000793%20acc%20Dashboard.xlsx:/workbook/tables/tesco0/columns/add
+HEADERS {Content-type: application/json}
+BODY {
+    "index": 4,
+    "name": "Scheduled"
+}
