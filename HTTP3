@@ -1,0 +1,6 @@
+METHOD PATCH
+URL https://graph.microsoft.com/v1.0/sites/@{body('HTTP1')?['ID']}/lists/97e20fa2-0b94-4c89-a88f-51de2b39eef8/drive/root:/GLOBAL/EAIIndexMonthlyReportFiles/Tesco/Tesco%20-%2061000793%20acc%20Dashboard.xlsx:/workbook/tables/tesco0/columns/19
+HEADERS {Content-type: application/json}
+BODY { 
+ "values": "=B4"
+}
