@@ -1,0 +1,2 @@
+METHOD GET
+URL https://graph.microsoft.com/v1.0/sites/zebra.sharepoint.com:/sites/GlobalSSBOT
