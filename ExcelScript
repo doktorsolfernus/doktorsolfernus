@@ -1,0 +1,10 @@
+https://powerusers.microsoft.com/t5/Building-Flows/Copy-Excel-Data-with-formula-and-paste-only-values/td-p/710483
+
+#
+function main(workbook: ExcelScript.Workbook) {
+  let tesco0 = workbook.getTable("tesco0").getRangeBetweenHeaderAndTotal().getValues();
+  let tesco1 = workbook.getTable("tesco1").getRangeBetweenHeaderAndTotal().getValues();
+  let tesco2 = workbook.getTable("tesco2").getRangeBetweenHeaderAndTotal().getValues();
+  let tesco = tesco0.concat(tesco1.concat(tesco2));
+  console.log(tesco);
+}
