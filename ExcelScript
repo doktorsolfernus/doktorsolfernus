@@ -17,7 +17,10 @@ function createTbl (sheet: ExcelScript.Worksheet, i: number) {
   tesco.setName('tesco' + i);
   sheet.getTable('tesco' + i).addColumn(4, null, 'Delta')
   let deltaRange = sheet.getTable('tesco' + i).getColumn('Delta').getRangeBetweenHeaderAndTotal();
-  deltaRange.setFormula("=VLOOKUP(A4&J4, 'old'!B:D, 3, 0)");
+  deltaRange.setFormula("=D4-VLOOKUP(A4&J4, 'old'!B:D, 3, 0)");
+  deltaRange.setNumberFormat("general");
+  deltaRange.clearAllConditionalFormats();
+  deltaRange.addConditionalFormat(ExcelScript.ConditionalFormatType.colorScale)
 }
 
 function main(workbook: ExcelScript.Workbook, data: string) {
@@ -28,16 +31,18 @@ function main(workbook: ExcelScript.Workbook, data: string) {
   let sheet = workbook.addWorksheet();
   sheet.setName('old');
   sheet.setVisibility(ExcelScript.SheetVisibility.hidden);
-  //let sheet = workbook.getWorksheet("old");
-
   let targetRange = sheet.getRange("A1:J" + (1 + myArr.length - 1));
   targetRange.setValues(myArr);
   let formulaRange = sheet.getRange("B1:B" + (1 + myArr.length - 1));
-  formulaRange.setFormula("=A4&J4");
+  formulaRange.setFormula("=A1&J1");
 
-  //sheet.getTable('tesco0').getColumn('Delta').delete();
-  //sheet.getTable('tesco0').convertToRange();
-  
+  /*workbook.getWorksheet("Safety Stock - 2 Day").getTable('tesco0').getColumn('Delta').delete();
+  workbook.getWorksheet("Safety Stock - 2 Day").getTable('tesco0').convertToRange();
+  workbook.getWorksheet("General SKus - 42day").getTable('tesco1').getColumn('Delta').delete();
+  workbook.getWorksheet("General SKus - 42day").getTable('tesco1').convertToRange();
+  workbook.getWorksheet("Project orders").getTable('tesco2').getColumn('Delta').delete();
+  workbook.getWorksheet("Project orders").getTable('tesco2').convertToRange();*/
+
   sheet = workbook.getWorksheet("Safety Stock - 2 Day");
   createTbl(sheet, 0);
   sheet = workbook.getWorksheet("General SKus - 42day");
